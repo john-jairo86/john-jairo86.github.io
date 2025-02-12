@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="font-awesome/cdnjs.cloudflare.com_ajax_libs_font-awesome_6.4.2_css_all.min.css">
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+    <title>Konect</title>
+</head>
+
+<body>
+    <br>
+
+    <!-- Dark mode local storage -->
+    <div id="div_check">
+        <input type="checkbox" class="checkbox" id="checkbox">
+        <label for="checkbox" class="checkbox-label">
+            <i class="fas fa-moon"></i>
+            <i class="fas fa-sun"></i>
+            <span class="ball"></span>
+        </label>
+    </div>
+
+    <!-- Botonos modal -->
+    <div class="text-center">
+        <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal"
+            data-bs-target="#tipiguia">Tipiguía</button>
+    </div>
+
+    <!-- Form T -->
+    <div class="modal fade" id="tipiguia" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Tipificar</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body bg-dark">
+                    <form class="row g-3">
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="area" placeholder="Area">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control text-dark" disabled id="fecha" placeholder="Fecha">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="rut" placeholder="Rut">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="nombre_c" placeholder="Nombre Ciente">
+                        </div>
+
+                        <div class="col-6">
+                            <textarea class="form-control" id="direccion_ont_olt"
+                                placeholder="Dirección / Ont / Olt"></textarea>
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="id_ll" placeholder="Id llamada">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="board" placeholder="Board">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="nodo" placeholder="Nodo">
+                        </div>
+
+
+                        <!-- Text areas -->
+                        <div class="col-12">
+                            <textarea class="form-control" id="obs" placeholder="Observación"></textarea>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button id="copiar" type="button" class="btn btn-success">Copiar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <script src="Bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script src="Bootstrap/sweetalert2@11.js"></script>
+    <script src="font-awesome/cdnjs.cloudflare.com_ajax_libs_font-awesome_6.4.2_js_all.min.js"></script>
+</body>
+
+</html>
