@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD IndexedDB con Modal</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.10/sweetalert2.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <br>
+    <!-- Dark mode local storage -->
+    <div id="div_check">
+        <input type="checkbox" class="checkbox" id="checkbox">
+        <label for="checkbox" class="checkbox-label">
+            <i class="fas fa-moon"></i>
+            <i class="fas fa-sun"></i>
+            <span class="ball"></span>
+        </label>
+    </div>
+
+
+
+    <div class="container mt-4">
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#dataModal"
+            onclick="clearForm()">Tipiguía</button>
+
+        <br><br>
+
+        <table id="dataTable" class="table table-bordered table-responsive-xxl table-responsive-lg table-responsive-md table-responsive-sm">
+            <thead>
+                <tr>
+                    <th>Area</th>
+                    <th>Nombre</th>
+                    <th>RUT</th>
+                    <th>Dirección</th>
+                    <th>ID</th>
+                    <th>Board</th>
+                    <th>Nodo</th>
+                    <th>Observación</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div class="modal fade" id="dataModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success">
+                    <h5 class="modal-title">Tipificar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body bg-dark">
+                    <form id="dataForm" class="row g-3">
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="area" placeholder="Área">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control text-dark" disabled id="fecha"
+                                placeholder="Fecha">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="nombre" placeholder="Nombre Cliente">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="rut" placeholder="Rut">
+                        </div>
+
+                        <div class="col-6">
+                            <textarea class="form-control" id="direccion"
+                                placeholder="Dirección / Ont / Olt"></textarea>
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="id" placeholder="Id llamada">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="board" placeholder="Board">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="nodo" placeholder="Nodo">
+                        </div>
+
+
+                        <!-- Text areas -->
+                        <div class="col-12">
+                            <textarea class="form-control" id="observacion" placeholder="Observación"></textarea>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-primary" id="saveBtn">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.10/sweetalert2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"></script>
+    <script src="//cdn.datatables.net/plug-ins/2.2.2/pagination/bootstrap_input.js"></script>
+<script src="script.js"></script>
+
+
+    
+</body>
+
+</html>
