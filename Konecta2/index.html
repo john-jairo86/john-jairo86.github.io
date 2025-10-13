@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CRUD IndexedDB + Modal + Tabla</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.10/sweetalert2.css"/>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <br>
+    <!-- Dark mode local storage -->
+    <div id="div_check">
+        <input type="checkbox" class="checkbox" id="checkbox">
+        <label for="checkbox" class="checkbox-label">
+            <i class="fas fa-moon"></i>
+            <i class="fas fa-sun"></i>
+            <span class="ball"></span>
+        </label>
+    </div>
+
+    <br>
+    <button class="btn btn-danger" onclick="limpiarPersonas()">Borrar Tabla</button>
+
+    <div class="container py-4">
+        <div class="text-center mb-3">
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registroModal" id="btnNuevo">Nuevo
+                Registro</button>
+        </div>
+    </div>
+
+    <div class="container my-4">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <table id="tablaRegistros" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th id="area_th">Área</th>
+                            <th id="fecha_th">Fecha</th>
+                            <th id="nombre_th">Nombre</th>
+                            <th id="rut_th">Rut</th>
+                            <th id="direccion_th">Dirección</th>
+                            <th id="id_th">Id</th>
+                            <th id="board_th">Board</th>
+                            <th id="olt_th">Olt</th>
+                            <th id="">Observación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <div class="modal fade" id="registroModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Tipificar</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body bg-dark">
+                    <form id="formRegistro" class="row g-3">
+                        <input type="text" id="editId" hidden>
+
+                        <div class="col-6">
+                            <input disabled type="text" class="form-control" id="area" placeholder="Área">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control text-dark" disabled id="fecha" placeholder="Fecha">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="nombre" placeholder="Nombre Cliente">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="rut" placeholder="Rut">
+                        </div>
+
+                        <div class="col-6">
+                            <textarea class="form-control" id="direccion" placeholder="Dirección"></textarea>
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="idCampo" placeholder="Id llamada">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="board" placeholder="Board">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="olt" placeholder="Nodo">
+                        </div>
+
+
+                        <!-- Text areas -->
+                        <div class="col-12">
+                            <textarea class="form-control" id="observacion" placeholder="Observación"></textarea>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button id="copiar" type="submit" class="btn btn-success">Copiar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.10/sweetalert2.min.js"></script>
+
+    <script>
+        document.addEventListener("click", async (e) => {
+            const fecha = document.getElementById("fecha").value = new Date().toLocaleString();
+            const $AREA = document.getElementById("area").value = "Soporte";
+        })
+
+        document.getElementById("btnNuevo").addEventListener("click", {
+
+        })
+
+
+
+        document.addEventListener("DOMContentLoaded", () => {
+            let db;
+            const request = indexedDB.open("KonectDB", 1);
+            let dataTable;
+
+            request.onupgradeneeded = (event) => {
+                db = event.target.result;
+                if (!db.objectStoreNames.contains("registros")) {
+                    db.createObjectStore("registros", { keyPath: "id", autoIncrement: true });
+                }
+            };
+
+            request.onsuccess = (event) => {
+                db = event.target.result;
+                mostrarDatos();
+            };
+
+            // Mostrar datos
+            function mostrarDatos() {
+                const transaction = db.transaction(["registros"], "readonly");
+                const store = transaction.objectStore("registros");
+                const request = store.getAll();
+
+                request.onsuccess = (e) => {
+                    const registros = e.target.result.reverse(); // mostrar primero los nuevos
+                    if (dataTable) dataTable.destroy();
+                    const tbody = document.getElementById("tableBody");
+                    tbody.innerHTML = "";
+
+                    registros.forEach((item) => {
+                        const tr = document.createElement("tr");
+                        tr.innerHTML = `
+                    <td>${item.area}</td>
+                    <td>${item.fecha}</td>
+                    <td>${item.nombre}</td>
+                    <td>${item.rut}</td>
+                    <td>${item.direccion}</td>
+                    <td>${item.idCampo}</td>
+                    <td>${item.board}</td>
+                    <td>${item.olt}</td>
+                    <td>${item.observacion}</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning btn-edit" data-id="${item.id}"><i class="fa-solid fa-pen-to-square" data-id="${item.id}"></i></button>
+
+                        <button class="btn btn-sm btn-danger btn-del" data-id="${item.id}"><i class="fa-solid fa-trash-can" data-id="${item.id}"></i></button>
+
+                        <button class="btn btn-sm btn-secondary btn-copy" data-id="${item.id}"><i class="fa-solid fa-copy" data-id="${item.id}"></i></button>
+                    </td>
+                `;
+                        tbody.appendChild(tr);
+                    });
+
+                    dataTable = $("#tablaRegistros").DataTable({ order: [] });
+                };
+            }
+
+            // Guardar / Actualizar
+            document.getElementById("formRegistro").addEventListener("submit", (e) => {
+                e.preventDefault();
+                const registro = {
+                    area: area.value,
+                    fecha: fecha.value,
+                    nombre: nombre.value,
+                    rut: rut.value,
+                    direccion: direccion.value,
+                    idCampo: idCampo.value,
+                    board: board.value,
+                    olt: olt.value,
+                    observacion: observacion.value
+                };
+
+                const editId = document.getElementById("editId").value;
+                const tx = db.transaction(["registros"], "readwrite");
+                const store = tx.objectStore("registros");
+
+                if (editId) {
+                    registro.id = Number(editId);
+                    store.put(registro);
+                } else {
+                    store.add(registro);
+                }
+
+                tx.oncomplete = () => {
+                    copiarPortapapeles(registro);
+                    mostrarDatos();
+                    document.getElementById("nombre").value = "",
+                        document.getElementById("rut").value = "",
+                        document.getElementById("idCampo").value = "",
+                        document.getElementById("board").value = "",
+                        document.getElementById("olt").value = "",
+                        document.getElementById("direccion").value = "",
+                        document.getElementById("observacion").value = "";
+                    document.getElementById("editId").value = "";
+                    // bootstrap.Modal.getInstance(document.getElementById("registroModal")).hide();
+                };
+                document.getElementById("nombre").focus()
+            });
+
+            // Copiar datos al portapapeles
+            function copiarPortapapeles(data) {
+                const texto = `Área: ${data.area}\nFecha: ${data.fecha}\nNombre: ${data.nombre}\nRUT: ${data.rut}\nDirección: ${data.direccion}\nID: ${data.idCampo}\nBoard: ${data.board}\nOLT: ${data.olt}\nObservación: ${data.observacion}`;
+                navigator.clipboard.writeText(texto);
+            }
+
+            // Botones de acción
+            document.getElementById("tableBody").addEventListener("click", (e) => {
+                const id = Number(e.target.dataset.id);
+                if (e.target.classList.contains("btn-del")) eliminar(id);
+                if (e.target.classList.contains("fa-trash-can")) eliminar(id);
+                if (e.target.classList.contains("btn-edit")) editar(id);
+                if (e.target.classList.contains("fa-pen-to-square")) editar(id);
+                if (e.target.classList.contains("btn-copy")) copiar(id);
+                if (e.target.classList.contains("fa-copy")) copiar(id);
+            });
+
+            // Eliminar
+            function eliminar(id) {
+                const tx = db.transaction(["registros"], "readwrite");
+                tx.objectStore("registros").delete(id);
+                tx.oncomplete = mostrarDatos;
+            }
+
+            // Editar
+            function editar(id) {
+                const tx = db.transaction(["registros"], "readonly");
+                const store = tx.objectStore("registros");
+                const req = store.get(id);
+                req.onsuccess = (e) => {
+                    const r = e.target.result;
+                    area.value = r.area;
+                    fecha.value = r.fecha;
+                    nombre.value = r.nombre;
+                    rut.value = r.rut;
+                    direccion.value = r.direccion;
+                    idCampo.value = r.idCampo;
+                    board.value = r.board;
+                    olt.value = r.olt;
+                    observacion.value = r.observacion;
+                    editId.value = r.id;
+                    new bootstrap.Modal(document.getElementById("registroModal")).show();
+                };
+            }
+
+            // Copiar desde botón
+            function copiar(id) {
+                const tx = db.transaction(["registros"], "readonly");
+                const store = tx.objectStore("registros");
+                const req = store.get(id);
+                req.onsuccess = (e) => copiarPortapapeles(e.target.result);
+            }
+
+            // Botón nuevo
+            document.getElementById("btnNuevo").addEventListener("click", () => {
+                document.getElementById("formRegistro").reset();
+                document.getElementById("editId").value = "";
+
+            });
+        });
+
+        // Verifica el estado del modo oscuro en localStorage
+        const checkbox = document.getElementById("checkbox");
+        const dataT = document.getElementById("tablaRegistros");
+
+
+        if (localStorage.getItem("darkMode") === "true") {
+            checkbox.checked = true;
+            document.body.classList.add("dark");
+            dataT.classList.add("table-dark");
+        } else {
+            checkbox.checked = false;
+            document.body.classList.remove("dark");
+            dataT.classList.remove("table-dark");
+        }
+
+        // Escucha el cambio en el checkbox para activar/desactivar el modo oscuro
+        checkbox.addEventListener("change", () => {
+            document.body.classList.toggle("dark");
+            dataT.classList.toggle("table-dark");
+            localStorage.setItem("darkMode", checkbox.checked ? "true" : "false");
+        });
+
+
+        function limpiarPersonas() {
+            Swal.fire({
+                title: "¿Estas seguro?",
+                text: "¡No podrás revertir esto!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DC3545",
+                cancelButtonColor: "#3085d6",
+                cancelButtonText: "Cancelar",
+                confirmButtonText: "¡Si, borralo!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const dbName = "KonectDB";
+                    const storeName = "registros";
+                    let request = indexedDB.open(dbName);
+
+                    request.onsuccess = function (event) {
+                        let db = event.target.result;
+                        let transaction = db.transaction(storeName, "readwrite");
+                        let store = transaction.objectStore(storeName);
+
+                        let clearRequest = store.clear();
+
+                        clearRequest.onsuccess = function () {
+                            // 
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.onmouseenter = Swal.stopTimer;
+                                    toast.onmouseleave = Swal.resumeTimer;
+                                }
+                            });
+                            Toast.fire({
+                                icon: "success",
+                                title: "Tabla eliminada con exito"
+                            });
+                            mostrarDatos(); // Actualizar la tabla después de eliminar los datos
+                        };
+
+                        clearRequest.onerror = function () {
+                            console.error("Error al limpiar la tabla:", clearRequest.error);
+                        };
+                    };
+
+                    request.onerror = function () {
+                        console.error("Error al abrir la base de datos:", request.error);
+                    };
+                }
+            });
+        }
+
+
+
+        function limpiarPersonas() {
+    Swal.fire({
+        title: "¿Estas seguro?",
+        text: "¡Esto eliminará por completo la base de datos y todos los registros!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DC3545",
+        cancelButtonColor: "#3085d6",
+        cancelButtonText: "Cancelar",
+        confirmButtonText: "¡Sí, eliminar todo!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const dbName = "KonectDB";
+            const deleteRequest = indexedDB.deleteDatabase(dbName);
+
+            deleteRequest.onsuccess = function () {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+                Toast.fire({
+                    icon: "success",
+                    title: "Base de datos eliminada correctamente"
+                });
+
+                // Limpia la tabla visualmente
+                const tbody = document.getElementById("tableBody");
+                tbody.innerHTML = "";
+                if ($.fn.DataTable.isDataTable("#tablaRegistros")) {
+                    $("#tablaRegistros").DataTable().clear().destroy();
+                }
+            };
+
+            deleteRequest.onerror = function () {
+                Swal.fire("Error", "No se pudo eliminar la base de datos", "error");
+                console.error("Error al eliminar IndexedDB:", deleteRequest.error);
+            };
+
+            deleteRequest.onblocked = function () {
+                Swal.fire("Bloqueada", "Cierra otras pestañas que usen esta base de datos y vuelve a intentar.", "warning");
+            };
+        }
+    });
+}
+
+    </script>
+</body>
+
+</html>
