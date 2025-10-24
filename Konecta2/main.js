@@ -236,60 +236,61 @@ checkbox.addEventListener("change", () => {
 });
 
 
-// function limpiarPersonas() {
-//     Swal.fire({
-//         title: "¿Estas seguro?",
-//         text: "¡No podrás revertir esto!",
-//         icon: "warning",
-//         showCancelButton: true,
-//         confirmButtonColor: "#DC3545",
-//         cancelButtonColor: "#3085d6",
-//         cancelButtonText: "Cancelar",
-//         confirmButtonText: "¡Si, borralo!"
-//     }).then((result) => {
-//         if (result.isConfirmed) {
-//             const dbName = "KonectDB";
-//             const storeName = "registros";
-//             let request = indexedDB.open(dbName);
+ function limpiarPersonas() {
+     Swal.fire({
+         title: "¿Estas seguro?",
+         text: "¡No podrás revertir esto!",
+         icon: "warning",
+         showCancelButton: true,
+         confirmButtonColor: "#DC3545",
+         cancelButtonColor: "#3085d6",
+         cancelButtonText: "Cancelar",
+         confirmButtonText: "¡Si, borralo!"
+     }).then((result) => {
+         if (result.isConfirmed) {
+             const dbName = "KonectDB";
+             const storeName = "registros";
+             let request = indexedDB.open(dbName);
 
-//             request.onsuccess = function (event) {
-//                 let db = event.target.result;
-//                 let transaction = db.transaction(storeName, "readwrite");
-//                 let store = transaction.objectStore(storeName);
+             request.onsuccess = function (event) {
+                 let db = event.target.result;
+                 let transaction = db.transaction(storeName, "readwrite");
+                 let store = transaction.objectStore(storeName);
 
-//                 let clearRequest = store.clear();
+                 let clearRequest = store.clear();
 
-//                 clearRequest.onsuccess = function () {
-//                     // 
-//                     const Toast = Swal.mixin({
-//                         toast: true,
-//                         position: "top-end",
-//                         showConfirmButton: false,
-//                         timer: 3000,
-//                         timerProgressBar: true,
-//                         didOpen: (toast) => {
-//                             toast.onmouseenter = Swal.stopTimer;
-//                             toast.onmouseleave = Swal.resumeTimer;
-//                         }
-//                     });
-//                     Toast.fire({
-//                         icon: "success",
-//                         title: "Tabla eliminada con exito"
-//                     });
-//                     mostrarDatos(); // Actualizar la tabla después de eliminar los datos
-//                 };
+                 clearRequest.onsuccess = function () {
+                     // 
+                     const Toast = Swal.mixin({
+                         toast: true,
+                         position: "top-end",
+                         showConfirmButton: false,
+                         timer: 3000,
+                         timerProgressBar: true,
+                         didOpen: (toast) => {
+                             toast.onmouseenter = Swal.stopTimer;
+                             toast.onmouseleave = Swal.resumeTimer;
+                         }
+                     });
+                     Toast.fire({
+                         icon: "success",
+                         title: "Tabla eliminada con exito"
+                     });
+                     mostrarDatos(); // Actualizar la tabla después de eliminar los datos
+                 };
 
-//                 clearRequest.onerror = function () {
-//                     console.error("Error al limpiar la tabla:", clearRequest.error);
-//                 };
-//             };
+                 clearRequest.onerror = function () {
+                     console.error("Error al limpiar la tabla:", clearRequest.error);
+                 };
+             };
 
-//             request.onerror = function () {
-//                 console.error("Error al abrir la base de datos:", request.error);
-//             };
-//         }
-//     });
-// }
+             request.onerror = function () {
+                 console.error("Error al abrir la base de datos:", request.error);
+             };
+         }
+     });
+ }
+
 
 
 
