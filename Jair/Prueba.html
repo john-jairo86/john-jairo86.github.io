@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Konecta2</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.10/sweetalert2.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    
+    <!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dropdown con fieldset y búsqueda</title>
+  
+</head>
+<body style="font-family: system-ui, sans-serif; padding: 1.2rem;">
+
+  <h1>Dropdown con fieldset y búsqueda</h1>
+
+  <div class="dropdown-fieldset">
+    <!-- Botón que abre/cierra -->
+    <div id="toggleDropdown" class="toggle-btn" role="button" aria-expanded="false" tabindex="0">
+      <span id="selectedLabel">Seleccione...</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden>
+        <path d="M7 10l5 5 5-5z"/>
+      </svg>
+    </div>
+
+    <!-- Fieldset que hace de dropdown -->
+    <fieldset id="myFieldset" hidden aria-hidden="true" style="width:100%">
+      <legend class="visually-hidden">Opciones</legend>
+
+      <!-- Input de búsqueda -->
+      <input id="searchInput" type="search" placeholder="Buscar..." aria-label="Buscar opción" style="width:100%;box-sizing:border-box;padding:.45rem;border-radius:4px;border:1px solid #ccc;">
+
+      <!-- Lista de opciones -->
+      <ul id="optionsList" class="" role="listbox" tabindex="0" aria-label="Lista de opciones">
+        <!-- Opciones de ejemplo -->
+        <li role="option" data-value="router">Routereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee     EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE  ddddddddddddddddddd ewrtwertwre</li>
+        <li role="option" data-value="switch">Switch</li>
+        <li role="option" data-value="onu">ONU</li>
+        <li role="option" data-value="antena">Antena</li>
+        <li role="option" data-value="servidor">Servidor</li>
+        <li role="option" data-value="cable">Cable</li>
+        <li role="option" data-value="panel">Panel</li>
+        <li role="option" data-value="rack">Rack</li>
+        <li role="option" data-value="fuente">Fuente</li>
+      </ul>
+    </fieldset>
+  </div>
+
+  <!-- Input oculto que recibe el valor seleccionado (puedes usarlo en formularios) -->
+  <input type="hidden" id="selectedValue" name="device_type" value="">
+
+  <script>
+    // Referencias
+    const toggleBtn = document.getElementById('toggleDropdown');
+    const fieldset = document.getElementById('myFieldset');
+    const searchInput = document.getElementById('searchInput');
+    const optionsList = document.getElementById('optionsList');
+    const selectedLabel = document.getElementById('selectedLabel');
+    const hiddenValue = document.getElementById('selectedValue');
+
+    // Toggle show/hide con atributo hidden (usa toggleAttribute si quieres)
+    function openDropdown() {
+      fieldset.hidden = false;
+      fieldset.setAttribute('aria-hidden','false');
+      toggleBtn.setAttribute('aria-expanded','true');
+      searchInput.focus();
+    }
+    function closeDropdown() {
+      fieldset.hidden = true;
+      fieldset.setAttribute('aria-hidden','true');
+      toggleBtn.setAttribute('aria-expanded','false');
+      toggleBtn.focus();
+    }
+    function toggleDropdown() {
+      if (fieldset.hidden) openDropdown();
+      else closeDropdown();
+    }
+
+    toggleBtn.addEventListener('click', toggleDropdown);
+    // permite abrir/cerrar con Enter o Space
+    toggleBtn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleDropdown();
+      }
+    });
+
+    // Filtrar lista según búsqueda
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.trim().toLowerCase();
+      const items = optionsList.querySelectorAll('li');
+      items.forEach(li => {
+        const text = li.textContent.toLowerCase();
+        li.style.display = text.includes(q) ? '' : 'none';
+        li.classList.remove('active');
+      });
+      // si hay al menos un visible, poner el primero como activo visual
+      const firstVisible = [...items].find(i => i.style.display !== 'none');
+      if (firstVisible) {
+        firstVisible.classList.add('active');
+      }
+    });
+
+    // Seleccionar al hacer click en una opción
+    optionsList.addEventListener('click', (e) => {
+      const li = e.target.closest('li');
+      if (!li) return;
+      selectOption(li);
+    });
+
+    // Navegación con teclado (arriba/abajo + Enter/Escape)
+    optionsList.addEventListener('keydown', (e) => {
+      const visible = [...optionsList.querySelectorAll('li')].filter(li => li.style.display !== 'none');
+      if (!visible.length) return;
+      let idx = visible.findIndex(li => li.classList.contains('active'));
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (idx < visible.length - 1) idx++;
+        else idx = 0;
+        updateActive(visible, idx);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (idx > 0) idx--;
+        else idx = visible.length - 1;
+        updateActive(visible, idx);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (idx >= 0) selectOption(visible[idx]);
+      } else if (e.key === 'Escape') {
+        closeDropdown();
+      }
+    });
+
+    // Cierra si haces click fuera
+    document.addEventListener('click', (e) => {
+      if (!document.querySelector('.dropdown-fieldset').contains(e.target)) {
+        closeDropdown();
+      }
+    });
+
+    // Funciones auxiliares
+    function selectOption(li) {
+      const value = li.dataset.value ?? li.textContent.trim();
+      selectedLabel.textContent = li.textContent.trim();
+      hiddenValue.value = value;
+      // reset búsqueda
+      searchInput.value = '';
+      // quitar filtro (mostrar todas)
+      optionsList.querySelectorAll('li').forEach(x => { x.style.display=''; x.classList.remove('active'); });
+      closeDropdown();
+    }
+
+    function updateActive(visibleItems, index) {
+      visibleItems.forEach(i => i.classList.remove('active'));
+      visibleItems[index].classList.add('active');
+      // asegurar que el elemento activo sea visible en el scroll
+      visibleItems[index].scrollIntoView({block: 'nearest'});
+    }
+
+    // Inicial: marcar la primera opción como activa
+    (function init() {
+      const items = optionsList.querySelectorAll('li');
+      if (items.length) items[0].classList.add('active');
+    })();
+  </script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.10/sweetalert2.min.js"></script>
+</body>
+
+
+</html>

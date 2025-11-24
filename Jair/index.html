@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Konecta2</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.10/sweetalert2.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <br>
+    <!-- Dark mode local storage -->
+    <div id="div_check">
+        <input type="checkbox" class="checkbox" id="checkbox">
+        <label for="checkbox" class="checkbox-label">
+            <i class="fas fa-moon"></i>
+            <i class="fas fa-sun"></i>
+            <span class="ball"></span>
+        </label>
+    </div>
+
+    <br>
+    <button id="btn_limpiar" class="btn btn-danger" onclick="limpiarPersonas()">Borrar Tabla</button>
+
+    <div class="container py-4">
+        <div class="text-center mb-3">
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registroModal" id="btnNuevo">Nuevo
+                Registro</button>
+        </div>
+    </div>
+
+    <div class="container my-4">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <table id="tablaRegistros" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th id="area_th">Área</th>
+                            <th id="fecha_th">Fecha</th>
+                            <th id="nombre_th">Nombre</th>
+                            <th id="rut_th">Rut</th>
+                            <th id="direccion_th">Dirección</th>
+                            <th id="id_th">Id</th>
+                            <th id="board_th">Board</th>
+                            <th id="olt_th">Olt</th>
+                            <th id="">Observación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <div class="modal fade" id="registroModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Tipificar</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body bg-dark">
+                    <form id="formRegistro" class="row g-3">
+                        <input type="text" id="editId" hidden>
+
+                        <div class="col-6">
+                            <input disabled type="text" class="form-control" id="area" placeholder="Área">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control text-dark" disabled id="fecha" placeholder="Fecha">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="nombre" placeholder="Nombre Cliente">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="rut" placeholder="Rut">
+                        </div>
+
+                        <div class="col-6">
+                            <textarea class="form-control" id="direccion" placeholder="Dirección"></textarea>
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="idCampo" placeholder="Id llamada">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="board" placeholder="Board">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="olt" placeholder="Olt">
+                        </div>
+
+
+                        <div class="col-12 d-flex justify-content-center gap-3">
+
+                            <button id="btn_Toggle_int" type="button" class="btn btn-dark btn-sm">
+                                <i class="fa-solid fa-wifi"></i>
+                                <p>Internet</p>
+                            </button>
+
+                            <button id="btn_Toggle_tv" type="button" class="btn btn-dark btn-sm">
+                                <i class="fa fa-tv" aria-hidden="true"></i>
+                                <p>Televisión</p>
+                            </button>
+
+                            <button type="button" class="btn btn-dark btn-sm">
+                                <i class="fa-solid fa-phone"></i>
+                                <p>Telefonía</p>
+                            </button>
+
+                        </div>
+
+
+                        <!-- FIELDSET INTERNET -->
+                        <fieldset id="fielDrop" hidden class="p-2 mt-2">
+
+                            <!-- Buscador -->
+                            <input type="text" class="form-control mb-2" id="searchInput" placeholder="Buscar...">
+
+                            <!-- Opciones -->
+                            <ul id="optionsList" class="list-group">
+
+                                <li class="list-group-item" data-value="Cliente sin internet, reset eléctrico servicio ok.">Cliente sin internet, reset eléctrico servicio ok.</li>
+
+                                <li class="list-group-item" data-value="Cliente se comunica para cambiar la contraseña, se realiza cambio cliente se conecta.">Cliente se comunica para cambiar la contraseña</li>
+
+                                <li class="list-group-item" data-value="Cliente con fallas en su servicio, se verifica en sistema y vemos pérdida de señal luz LOS, se verifica en Twitter y vemos que no hay más clientes afectados, reset eléctrico no retoma.">Cliente con fallas en su servicio, se verifica en sistema y vemos pérdida de señal luz LOS, se verifica en Twitter y vemos que no hay más clientes afectados, reset eléctrico modem no retoma.</li>
+
+                                <li class="list-group-item" data-value="Cliente con fallas en el servicio se verifica en sistema y vemos la ONT en estado power off, cliente indica que tiene luces verdes, reset eléctrico no retoma.">Cliente con fallas en el servicio se verifica en sistema y vemos la ONT en estado power off, cliente indica que tiene luces verdes, reset eléctrico modem no retoma.</li>
+
+                                <li class="list-group-item" data-value="Cliente con fallas en el servicio se verifica en sistema y vemos la ONT en estado Desconocido se verifica historial de morsialidad cliente al día en el pago, cliente indica que tiene luz LOS en rojo, reset eléctrico no retoma.">Cliente con fallas en el servicio se verifica en sistema y vemos la ONT en estado Desconocido se verifica historial de morsialidad cliente al día en el pago, cliente indica que tiene luz LOS en rojo, reset eléctrico modem no retoma,</li>
+                                <li class="list-group-item" data-value="Cliente con fallas e el servicio se verifica en sistema y vemos la ONT en estado conectado pero con niveles fuera de rango, se verifican fallas puntua, reset eléctrico no retoma.">Cliente con fallas e el servicio se verifica en sistema y vemos la ONT en estado conectado pero con niveles fuera de rango, se verifican fallas puntua, reset eléctrico modem no retoma.</li>
+                                
+                                <li class="list-group-item" data-value="Cliente con falla en el servicio de internet dice que está intermitente, se verifica en sistema, vemos los niveles óptimos, cambio de canal, refresh ip, reset eléctrico no retoma.">Cliente con falla en el servicio de internet dice que está intermitente, se verifica en sistema, vemos los niveles óptimos, cambio de canal, refresh ip, reset eléctrico no retoma.</li>
+
+                            </ul>
+                        </fieldset>
+
+                        <!-- Valor oculto -->
+                        <input type="hidden" id="selectedValue">
+
+
+
+
+                        <!-- FIELDSET TV -->
+                        <fieldset id="fielDrop_tv" hidden class="p-2 mt-2">
+
+                            <!-- Buscador -->
+                            <input type="text" class="form-control mb-2" id="searchInput_tv" placeholder="Buscar...">
+
+                            <!-- Opciones -->
+                            <ul id="optionsList_tv" class="list-group">
+
+                                <li class="list-group-item" data-value="Cliente se comunica para vincular mundo go se valida datos servicio ok.">Cliente se comunica para vincular mundo go se valida datos servicio ok.</li>
+
+                                <li class="list-group-item" data-value="Cliente indica que se encuentra sin señal, se revisa HDMI 1 y 2 (input, sourse), se revisa cableado, reset eléctrico no retoma.">Cliente indica que se encuentra sin señal, se revisa HDMI 1 y 2 (input, sourse), se revisa cableado, reset eléctrico no retoma.</li>
+
+                                <li class="list-group-item" data-value="Cliente indica que deco no prende , se revisa boton on/off, se cambia de toma corriente, se revisa cableado no retoma.">Cliente indica que deco no prende , se revisa botón on/off, se cambia de toma corriente, se revisa cableado no retoma.</li>
+
+                                <li class="list-group-item" data-value="Cliente indica que le faltan canales, se realiza busqueda de canales servicio ok.">Cliente indica que le faltan canales, se realiza busqueda de canales servicio ok.</li>
+
+                                <!-- <li class="list-group-item" data-value="Cliente con fallas en el servicio se verifica en sistema y vemos la ONT en estado Desconocido se verifica historial de morsialidad cliente al día en el pago, cliente indica que tiene luz LOS en rojo, reset eléctrico no retoma.">Cliente con fallas en el servicio se verifica en sistema y vemos la ONT en estado Desconocido se verifica historial de morsialidad cliente al día en el pago, cliente indica que tiene luz LOS en rojo, reset eléctrico modem no retoma,</li>
+                                <li class="list-group-item" data-value="Cliente con fallas e el servicio se verifica en sistema y vemos la ONT en estado conectado pero con niveles fuera de rango, se verifican fallas puntua, reset eléctrico no retoma.">Cliente con fallas e el servicio se verifica en sistema y vemos la ONT en estado conectado pero con niveles fuera de rango, se verifican fallas puntua, reset eléctrico modem no retoma.</li>
+                                
+                                <li class="list-group-item" data-value="Cliente con falla en el servicio de internet dice que está intermitente, se verifica en sistema, vemos los niveles óptimos, cambio de canal, refresh ip, reset eléctrico no retoma.">Cliente con falla en el servicio de internet dice que está intermitente, se verifica en sistema, vemos los niveles óptimos, cambio de canal, refresh ip, reset eléctrico no retoma.</li> -->
+
+                            </ul>
+                        </fieldset>
+
+                        <!-- Valor oculto -->
+                        <input type="hidden" id="selectedValue_tv">
+
+                        
+
+                        <!-- Text areas -->
+                        <div class="col-12">
+                            <textarea class="form-control" id="observacion" placeholder="Observación"></textarea>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button id="copiar" type="submit" class="btn btn-success">Copiar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.10/sweetalert2.min.js"></script>
+    <script src="main.js"></script>
+</body>
+
+
+</html>
