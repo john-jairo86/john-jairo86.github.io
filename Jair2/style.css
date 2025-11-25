@@ -1,0 +1,110 @@
+#area_th {
+    width: 35px;
+}
+
+#fecha_th {
+    width: 41px;
+}
+
+#rut_th {
+    width: 95px;
+}
+
+#nombre_th {
+    width: 65px;
+}
+
+#direccion_th {
+    width: 150px;
+}
+
+#id_th {
+    width: 50px;
+}
+
+#board_th {
+    width: 45px;
+}
+
+#olt_th {
+    width: 43px;
+}
+
+
+
+body.dark {
+    background-color: #212529;
+}
+
+/* #9b59b6 */
+
+body.dark h1,
+body.dark .support a {
+    color: #FFFFFF;
+}
+
+#div_check {
+    margin-left: 30px;
+}
+
+#btn_limpiar {
+    margin-left: 30px;
+}
+
+.checkbox {
+    opacity: 0;
+    position: absolute;
+}
+
+.checkbox-label {
+    background-color: #111;
+    width: 50px;
+    height: 26px;
+    border-radius: 50px;
+    position: relative;
+    padding: 5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.fa-moon {
+    color: #f1c40f;
+}
+
+.fa-sun {
+    color: #f39c12;
+}
+
+.checkbox-label .ball {
+    background-color: #fff;
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    border-radius: 50%;
+    transition: transform 0.2s linear;
+}
+
+.checkbox:checked+.checkbox-label .ball {
+    transform: translateX(24px);
+}
+
+
+#direccion {
+    height: 38px;
+    /* Alto fijo */
+    resize: none;
+    /* Evita que el usuario cambie el tamaño */
+}
+
+
+#btn_Toggle_int * {
+    pointer-events: none;
+}
+
+#btn_Toggle_tv * {
+    pointer-events: none;
+}

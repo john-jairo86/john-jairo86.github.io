@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Konecta2</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.10/sweetalert2.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <br>
+    <!-- Dark mode local storage -->
+    <div id="div_check">
+        <input type="checkbox" class="checkbox" id="checkbox">
+        <label for="checkbox" class="checkbox-label">
+            <i class="fas fa-moon"></i>
+            <i class="fas fa-sun"></i>
+            <span class="ball"></span>
+        </label>
+    </div>
+
+    <br>
+    <button id="btn_limpiar" class="btn btn-danger" onclick="limpiarPersonas()">Borrar Tabla</button>
+
+    <div class="container py-4">
+        <div class="text-center mb-3">
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registroModal" id="btnNuevo">Nuevo
+                Registro</button>
+        </div>
+    </div>
+
+    <div class="container my-4">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <table id="tablaRegistros" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th id="area_th">Área</th>
+                            <th id="fecha_th">Fecha</th>
+                            <th id="nombre_th">Nombre</th>
+                            <th id="rut_th">Rut</th>
+                            <th id="direccion_th">Dirección</th>
+                            <th id="id_th">Id</th>
+                            <th id="board_th">Board</th>
+                            <th id="olt_th">Olt</th>
+                            <th id="">Observación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <div class="modal fade" id="registroModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Tipificar</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body bg-dark">
+                    <form id="formRegistro" class="row g-3">
+                        <input type="text" id="editId" hidden>
+
+                        <div class="col-6">
+                            <input disabled type="text" class="form-control" id="area" placeholder="Área">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control text-dark" disabled id="fecha" placeholder="Fecha">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="nombre" placeholder="Nombre Cliente">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="rut" placeholder="Rut">
+                        </div>
+
+                        <div class="col-6">
+                            <textarea class="form-control" id="direccion" placeholder="Dirección"></textarea>
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="idCampo" placeholder="Id llamada">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="board" placeholder="Board">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="olt" placeholder="Olt">
+                        </div>
+
+
+                        <div class="col-12 d-flex justify-content-center gap-3">
+
+                            <button id="btn_Toggle_int" type="button" class="btn btn-dark btn-sm">
+                                <i class="fa-solid fa-wifi"></i>
+                                <p>Internet</p>
+                            </button>
+
+                            <button id="btn_Toggle_tv" type="button" class="btn btn-dark btn-sm">
+                                <i class="fa fa-tv" aria-hidden="true"></i>
+                                <p>Televisión</p>
+                            </button>
+
+                            <button type="button" class="btn btn-dark btn-sm">
+                                <i class="fa-solid fa-phone"></i>
+                                <p>Telefonía</p>
+                            </button>
+
+                        </div>
+
+
+                        <!-- FIELDSET INTERNET -->
+                        <fieldset id="fielDrop" hidden class="p-2 mt-2">
+
+                            <!-- Buscador -->
+                            <input type="text" class="form-control mb-2" id="searchInput" placeholder="Buscar...">
+
+                            <!-- Opciones -->
+                            <ul id="optionsList" class="list-group">
+
+                                <li class="list-group-item" data-value="Reset eléctrico modem, cambio de canal, refresh ip servicio ok">Reset eléctrico modem, cambio de canal, refresh ip servicio ok</li>
+
+                                <li class="list-group-item" data-value="Sin Internet con luz roja los, eléctrico modem se verifica en sistema y vemos perdida de señal luz los, se verifica en twister y vemos que no hay mas clientes afectados">Sin Internet con luz roja los, eléctrico modem se verifica en sistema y vemos perdida de señal luz los, se verifica en twister y vemos que no hay mas clientes afectados</li>
+
+                                <li class="list-group-item" data-value="Sin Internet, reset eléctrico modem, cambio de canal, refresh ip servicio ok">Sin Internet, reset eléctrico modem, cambio de canal, refresh ip servicio ok</li>
+
+                                <li class="list-group-item" data-value="Intermitencia del Internet, reset eléctrico modem, cambio de canal, refresh ip servicio ok">Intermitencia del Internet, reset eléctrico modem, cambio de canal, refresh ip servicio ok</li>
+
+                                <li class="list-group-item" data-value="Internet no carga nada, reset eléctrico modem, cambio de canal, refresh ip servicio ok">Internet no carga nada, reset eléctrico modem, cambio de canal, refresh ip servicio ok</li>
+
+                                <li class="list-group-item" data-value="Conectado sin Internet, reset eléctrico, cambio de canal, refresh ip servicio ok">Conectado sin Internet, reset eléctrico, cambio de canal, refresh ip servicio ok</li>
+                                
+                                <li class="list-group-item" data-value="Módem no enciende, se cambia de toma corriente, se revisa botón on/off, pero no retoma">Módem no enciende, se cambia de toma corriente, se revisa botón on/off, pero no retoma</li>
+
+                                <li class="list-group-item" data-value="Cliente se comunica para solicitar cambio de contraseña se valida datos se realiza cambio cliente se conecta">Cliente se comunica para solicitar cambio de contraseña se valida datos se realiza cambio cliente se conecta</li>
+
+                                <li class="list-group-item" data-value="solicita visita tecnica se indica script cliente acepta"></li>
+
+                            </ul>
+                        </fieldset>
+
+                        <!-- Valor oculto -->
+                        <input type="hidden" id="selectedValue">
+
+
+
+
+                        <!-- FIELDSET TV -->
+                        <fieldset id="fielDrop_tv" hidden class="p-2 mt-2">
+
+                            <!-- Buscador -->
+                            <input type="text" class="form-control mb-2" id="searchInput_tv" placeholder="Buscar...">
+
+                            <!-- Opciones -->
+                            <ul id="optionsList_tv" class="list-group">
+
+                                <li class="list-group-item" data-value="Cliente se comunica para vincular mundo go">Cliente se comunica para vincular mundo go</li>
+
+                                <li class="list-group-item" data-value="Error de conexión de red en deco, reset eléctrico, cambio de canal, refresh ip, se conecta deco al wifi servicio ok">Error de conexión de red en deco, reset eléctrico, cambio de canal, refresh ip, se conecta deco al wifi servicio ok</li>
+
+                                <li class="list-group-item" data-value="Sin señal reset eléctrico, se revisa HDMI 1 y 2 con botón input o source, se revisa cableado, no retoma">Sin señal reset eléctrico, se revisa HDMI 1 y 2 con botón input o source, se revisa cableado, no retoma</li>
+
+                                <li class="list-group-item" data-value="Deco se queda cargando, reset eléctrico, cambio de canal, refresh ip, se borra datos y cache se vinculo servicio ok">Deco se queda cargando, reset eléctrico, cambio de canal, refresh ip, se borra datos y cache se vinculo servicio ok</li>
+
+                                <li class="list-group-item" data-value="Con imagen pero sin audio en todos lo canales, reset eléctrico, se revisa volumen con ambos controles, se revisa botón mute, se borra cache y datos se vincula">Con imagen pero sin audio en todos lo canales, reset eléctrico, se revisa volumen con ambos controles, se revisa botón mute, se borra cache y datos se vincula</li>
+
+                                <li class="list-group-item" data-value="Cliente indica que deco ya no prende, se conecta en otro toma corriente, se revisa cableado, se revisa botón on/off no retoma">Cliente indica que deco ya no prende, se conecta en otro toma corriente, se revisa cableado, se revisa botón on/off no retoma</li>
+
+                                <li class="list-group-item" data-value="Control no funciona con baterías nuevas, vincular control no retoma se indica sucursal">Control no funciona con baterías nuevas, vincular control no retoma se indica sucursal</li>
+
+                                <li class="list-group-item" data-value="solicita visita tecnica se indica script cliente acepta"></li>
+
+                            </ul>
+                        </fieldset>
+
+                        <!-- Valor oculto -->
+                        <input type="hidden" id="selectedValue_tv">
+
+                        
+
+                        <!-- Text areas -->
+                        <div class="col-12">
+                            <textarea class="form-control" id="observacion" placeholder="Observación"></textarea>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button id="copiar" type="submit" class="btn btn-success">Copiar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.10/sweetalert2.min.js"></script>
+    <script src="main.js"></script>
+</body>
+
+
+</html>
