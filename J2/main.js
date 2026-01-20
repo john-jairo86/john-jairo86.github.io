@@ -1,12 +1,12 @@
 document.addEventListener("click", async (e) => {
     const fecha = document.getElementById("fecha").value = new Date().toLocaleString();
-    const $AREA = document.getElementById("area").value;
+    const $CEDULA = document.getElementById("cedula").value;
 })
 
 
 const registroModal = document.getElementById('registroModal');
 registroModal.addEventListener('shown.bs.modal', () => {
-    document.getElementById('nombre').focus();
+    document.getElementById('idCampo').focus();
 });
 
 
@@ -42,16 +42,13 @@ document.addEventListener("DOMContentLoaded", () => {
             registros.forEach((item) => {
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
-                    <td>${item.area}</td>
                     <td>${item.fecha}</td>
                     <td>${item.nombre}</td>
                     <td>${item.rut}</td>
                     <td>${item.direccion}</td>
                     <td>${item.idCampo}</td>
-                    <td>${item.tarjeta}</td>
-                    <td>${item.olt}</td>
                     <td>${item.observacion}</td>
-                    <td>
+                    <td id="btn_table" class="text-center">
                         <button class="btn btn-sm btn-warning btn-edit" data-id="${item.id}"><i class="fa-solid fa-pen-to-square" data-id="${item.id}"></i></button>
 
                         <button class="btn btn-sm btn-danger btn-del" data-id="${item.id}"><i class="fa-solid fa-trash-can" data-id="${item.id}"></i></button>
@@ -70,14 +67,19 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("formRegistro").addEventListener("submit", (e) => {
         e.preventDefault();
         const registro = {
-            area: area.value,
             fecha: fecha.value,
+            cedula: cedula.value,
+            idCampo: idCampo.value,
+            telefono: telefono.value,
             nombre: nombre.value,
             rut: rut.value,
+            codigo_c: codigo_c.value,
+            nodo: nodo.value,
             direccion: direccion.value,
-            idCampo: idCampo.value,
-            tarjeta: tarjeta.value,
+            ont: ont.value,
             olt: olt.value,
+            tarjeta: tarjeta.value,
+            puerto: puerto.value,
             observacion: observacion.value
         };
 
@@ -95,17 +97,22 @@ document.addEventListener("DOMContentLoaded", () => {
         tx.oncomplete = () => {
             copiarPortapapeles(registro);
             mostrarDatos();
-            document.getElementById("nombre").value = "",
-                document.getElementById("rut").value = "",
                 document.getElementById("idCampo").value = "",
-                document.getElementById("tarjeta").value = "",
-                document.getElementById("olt").value = "",
+                document.getElementById("telefono").value = "",
+                document.getElementById("nombre").value = "",
+                document.getElementById("rut").value = "",
+                document.getElementById("codigo_c").value = "",
+                document.getElementById("nodo").value = "",
                 document.getElementById("direccion").value = "",
+                document.getElementById("ont").value = "",
+                document.getElementById("olt").value = "",
+                document.getElementById("tarjeta").value = "",
+                document.getElementById("puerto").value = "",
                 document.getElementById("observacion").value = "";
             document.getElementById("editId").value = "";
             // bootstrap.Modal.getInstance(document.getElementById("registroModal")).hide();
         };
-        document.getElementById("nombre").focus()
+        document.getElementById("idCampo").focus()
         // console.log(registro.area);
         const Toast = Swal.mixin({
             toast: true,
@@ -121,14 +128,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
         Toast.fire({
             icon: 'success',
-            title: `Area: ${registro.area}
-                Fecha: ${registro.fecha}
-                Rut: ${registro.rut}
-                Dirección: ${registro.direccion}
-                Id: ${registro.id}
-                Board: ${registro.tarjeta}
-                Olt: ${registro.olt}
-                Observación: ${registro.observacion},
+            title: `Fecha: ${registro.fecha}
+            Cedula: ${registro.cedula}
+            Id: ${registro.idCampo}
+            Telefono: ${registro.telefono}
+            Nombre: ${registro.nombre}
+            Rut: ${registro.rut}
+            Codigo: ${registro.codigo_c}
+            Nodo: ${registro.nodo}
+            Dirección: ${registro.direccion}
+            Ont: ${registro.ont}
+            Olt: ${registro.olt}
+            Tarjeta: ${registro.tarjeta}
+            Puerto: ${registro.puerto}
+            Observación: ${registro.observacion}
+
 `
         })
 
@@ -136,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Copiar datos al portapapeles
     function copiarPortapapeles(data) {
-        const texto = `Área: ${data.area}\nFecha: ${data.fecha}\nNombre: ${data.nombre}\nRUT: ${data.rut}\nDirección: ${data.direccion}\nID: ${data.idCampo}\nBoard: ${data.tarjeta}\nOLT: ${data.olt}\nObservación: ${data.observacion}`;
+        const texto = `Cedula: ${data.cedula}\nId: ${data.idCampo}\nTelefono: ${data.telefono}\nNombre: ${data.nombre}\nRut: ${data.rut}\nCodigo: ${data.codigo_c }\nNodo: ${data.nodo}\nDirección: ${data.direccion}\nOnt: ${data.ont}\nOlt: ${data.olt}\nTarjeta: ${data.tarjeta}\nPuerto: ${data.puerto}\nObservación: ${data.observacion}`;
         navigator.clipboard.writeText(texto);
         // console.log(texto);
         const Toast = Swal.mixin({
@@ -183,14 +197,19 @@ document.addEventListener("DOMContentLoaded", () => {
         const req = store.get(id);
         req.onsuccess = (e) => {
             const r = e.target.result;
-            area.value = r.area;
+            cedula.value = r.cedula;
+            idCampo.value = r.idCampo;
+            telefono.value = r.telefono;
             fecha.value = r.fecha;
             nombre.value = r.nombre;
             rut.value = r.rut;
+            codigo_c.value = r.codigo_c;
+            nodo.value = r.nodo;
             direccion.value = r.direccion;
-            idCampo.value = r.idCampo;
-            tarjeta.value = r.tarjeta;
+            ont.value = r.ont;
             olt.value = r.olt;
+            tarjeta.value = r.tarjeta;
+            puerto.value = r.puerto;
             observacion.value = r.observacion;
             editId.value = r.id;
             new bootstrap.Modal(document.getElementById("registroModal")).show();
@@ -348,68 +367,126 @@ document.querySelectorAll("select").forEach(select => {
 });
 
 
-document.getElementById("generarBtn").addEventListener("click", function () {
+document.addEventListener("DOMContentLoaded", function () {
 
+    /* =========================
+       PASOS OBLIGATORIOS
+    ========================== */
+    const pasosObligatorios = [
+        "servicio_falla",
+        "perdida_m",
+        "conectado",
+        "luces",
+        "estado_ont",
+        "redes_u"
+    ];
 
+    const generarBtn = document.getElementById("generarBtn");
 
-    const datosFormulario = {
-        editId: document.getElementById("editId").value,
-        area: document.getElementById("area").value,
-        idCampo: document.getElementById("idCampo").value,
-        telefono: document.getElementById("telefono").value,
-        nombre: document.getElementById("nombre").value,
-        rut: document.getElementById("rut").value,
-        codigo_c: document.getElementById("codigo_c").value,
-        nodo: document.getElementById("nodo").value,
-        direccion: document.getElementById("direccion").value,
-        ont: document.getElementById("ont").value,
-        olt: document.getElementById("olt").value,
-        tarjeta: document.getElementById("tarjeta").value,
-        puerto: document.getElementById("puerto").value,
-        observacion: document.getElementById("observacion").value
-    };
-    // URL base del Google Form
-    let baseURL =
-        "https://docs.google.com/forms/d/e/1FAIpQLScBARUWj5MxH9pp9ax1QWFa-2voO9cx75yEE0q3qq_ZiD593Q/viewform?usp=pp_url";
+    /* =========================
+       VALIDAR PASOS
+    ========================== */
+    function validarPasos() {
+        const completos = pasosObligatorios.every(id => {
+            const campo = document.getElementById(id);
+            return campo && campo.value.trim() !== "";
+        });
 
-    const observacionCompleta = `
-        ID: ${document.getElementById("idCampo").value}
-Telefono : ${document.getElementById("telefono").value}
-RUT: ${document.getElementById("rut").value}
-Código Cliente: ${document.getElementById("codigo_c").value}
-Nodo : ${document.getElementById("nodo").value}
-Direccion : ${document.getElementById("direccion").value}
-ONT: ${document.getElementById("ont").value}
-OLT: ${document.getElementById("olt").value}
-Tarjeta : ${document.getElementById("tarjeta").value}
-Puerto : ${document.getElementById("puerto").value}
-Observación: ${document.getElementById("observacion").value}
-`.trim();
+        generarBtn.disabled = !completos;
+    }
 
+    /* =========================
+       ESCUCHAR CAMBIOS
+    ========================== */
+    pasosObligatorios.forEach(id => {
+        const campo = document.getElementById(id);
+        if (campo) {
+            campo.addEventListener("change", validarPasos);
+        }
+    });
 
+    /* =========================
+       CLICK GENERAR
+    ========================== */
+    generarBtn.addEventListener("click", function (e) {
 
+        // Seguridad adicional
+        const incompletos = pasosObligatorios.filter(id =>
+            document.getElementById(id).value === ""
+        );
 
+        if (incompletos.length > 0) {
+            e.preventDefault();
+            alert("Debe completar todos los pasos antes de generar.");
+            return;
+        }
 
-    // Construcción dinámica usando los entry.X
-    let url = baseURL
-        + "&entry.1279701728=" + encodeURIComponent(document.getElementById("area").value)
-        + "&entry.737091952=" + encodeURIComponent(document.getElementById("rut").value)
-        + "&entry.1274396=" + encodeURIComponent(document.getElementById("servicio_falla").value)
-        + "&entry.1796537453=" + encodeURIComponent(document.getElementById("idCampo").value)
-        + "&entry.354392636=" + encodeURIComponent(document.getElementById("codigo_c").value)
-        + "&entry.971510061=" + encodeURIComponent(document.getElementById("ont").value)
-        + "&entry.2068363297=" + encodeURIComponent(document.getElementById("olt").value)
-        + "&entry.16222912=" + encodeURIComponent(document.getElementById("perdida_m").value)
-        + "&entry.288532483=" + encodeURIComponent(document.getElementById("conectado").value)
-        + "&entry.1848968622=" + encodeURIComponent(document.getElementById("luces").value)
-        + "&entry.763051468=" + encodeURIComponent(document.getElementById("estado_ont").value)
-        + "&entry.1097538933=" + encodeURIComponent(document.getElementById("redes_u").value)
-        + "&entry.1623308877=" + encodeURIComponent(observacionCompleta);
+        /* =========================
+           CAPTURA DATOS
+        ========================== */
+        const datosFormulario = {
+            editId: document.getElementById("editId").value,
+            cedula: document.getElementById("cedula").value,
+            idCampo: document.getElementById("idCampo").value,
+            telefono: document.getElementById("telefono").value,
+            nombre: document.getElementById("nombre").value,
+            rut: document.getElementById("rut").value,
+            codigo_c: document.getElementById("codigo_c").value,
+            nodo: document.getElementById("nodo").value,
+            direccion: document.getElementById("direccion").value,
+            ont: document.getElementById("ont").value,
+            olt: document.getElementById("olt").value,
+            tarjeta: document.getElementById("tarjeta").value,
+            puerto: document.getElementById("puerto").value,
+            observacion: document.getElementById("observacion").value
+        };
 
-    // Abrir Google Form lleno
-    window.open(url, "_blank");
+        /* =========================
+           OBSERVACION COMPLETA
+        ========================== */
+        const observacionCompleta = `
+ID: ${datosFormulario.idCampo}
+Telefono: ${datosFormulario.telefono}
+RUT: ${datosFormulario.rut}
+Código Cliente: ${datosFormulario.codigo_c}
+Nodo: ${datosFormulario.nodo}
+Dirección: ${datosFormulario.direccion}
+ONT: ${datosFormulario.ont}
+OLT: ${datosFormulario.olt}
+Tarjeta: ${datosFormulario.tarjeta}
+Puerto: ${datosFormulario.puerto}
+Observación: ${datosFormulario.observacion}
+        `.trim();
+
+        /* =========================
+           URL GOOGLE FORM
+        ========================== */
+        const baseURL =
+            "https://docs.google.com/forms/d/e/1FAIpQLScBARUWj5MxH9pp9ax1QWFa-2voO9cx75yEE0q3qq_ZiD593Q/viewform?usp=pp_url";
+
+        const url = baseURL
+            + "&entry.1279701728=" + encodeURIComponent(datosFormulario.cedula)
+            + "&entry.737091952=" + encodeURIComponent(datosFormulario.rut)
+            + "&entry.1274396=" + encodeURIComponent(document.getElementById("servicio_falla").value)
+            + "&entry.1796537453=" + encodeURIComponent(datosFormulario.idCampo)
+            + "&entry.354392636=" + encodeURIComponent(datosFormulario.codigo_c)
+            + "&entry.971510061=" + encodeURIComponent(datosFormulario.ont)
+            + "&entry.2068363297=" + encodeURIComponent(datosFormulario.olt)
+            + "&entry.16222912=" + encodeURIComponent(document.getElementById("perdida_m").value)
+            + "&entry.288532483=" + encodeURIComponent(document.getElementById("conectado").value)
+            + "&entry.1848968622=" + encodeURIComponent(document.getElementById("luces").value)
+            + "&entry.763051468=" + encodeURIComponent(document.getElementById("estado_ont").value)
+            + "&entry.1097538933=" + encodeURIComponent(document.getElementById("redes_u").value)
+            + "&entry.1623308877=" + encodeURIComponent(observacionCompleta);
+
+        /* =========================
+           ABRIR FORM
+        ========================== */
+        window.open(url, "_blank");
+    });
 
 });
+
 
 
 

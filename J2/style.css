@@ -1,6 +1,3 @@
-#area_th {
-    width: 35px;
-}
 
 #fecha_th {
     width: 41px;
@@ -30,7 +27,9 @@
     width: 43px;
 }
 
-
+#obs_th {
+    width: 300px !important;
+}
 
 body.dark {
     background-color: #212529;
