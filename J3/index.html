@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tipificador</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.10/sweetalert2.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <br>
+    <!-- Dark mode local storage -->
+    <div id="div_check">
+        <input type="checkbox" class="checkbox" id="checkbox">
+        <label for="checkbox" class="checkbox-label">
+            <i class="fas fa-moon"></i>
+            <i class="fas fa-sun"></i>
+            <span class="ball"></span>
+        </label>
+    </div>
+
+    <br>
+    <button id="btn_limpiar" class="btn btn-danger" onclick="limpiarPersonas()">Borrar Tabla</button>
+
+    <div class="container py-4">
+        <div class="text-center mb-3">
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registroModal" id="btnNuevo">Nuevo
+                Registro</button>
+        </div>
+    </div>
+
+    <div class="container my-4">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <table id="tablaRegistros" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th id="fecha_th">Fecha</th>
+                            <th id="nombre_th">Nombre</th>
+                            <th id="rut_th">Rut</th>
+                            <th id="direccion_th">Dirección</th>
+                            <th id="id_th">Id</th>
+                            <th id="obs_th">Observación</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fecha escondida -->
+    <div class="col-6">
+        <input type="text" class="form-control text-dark" hidden disabled id="fecha" placeholder="Fecha">
+    </div>
+
+
+
+    <div class="modal fade" id="registroModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Tipificar</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body bg-dark">
+                    <form id="formRegistro" class="row g-3">
+                        <input type="text" id="editId" hidden>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="cedula" placeholder="Cédula Ejecutivo">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="idCampo" placeholder="Id llamada">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="telefono" placeholder="Teléfono">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="nombre" placeholder="Nombre Cliente">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="rut" placeholder="Rut">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="codigo_c" placeholder="Codigo Contrato">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="nodo" placeholder="Nodo">
+                        </div>
+
+                        <div class="col-6">
+                            <textarea class="form-control" id="direccion" placeholder="Dirección"></textarea>
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="ont" placeholder="Ont">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="olt" placeholder="Olt">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="tarjeta" placeholder="Tarjeta">
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="puerto" placeholder="Puerto">
+                        </div>
+
+                        <!-- Text areas -->
+                        <div class="col-12">
+                            <textarea class="form-control" id="observacion" placeholder="Observación"></textarea>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-dark" data-bs-target="#modalPersiste"
+                                data-bs-toggle="modal">
+                                Persiste
+                            </button>
+
+                            <button type="button" class="btn btn-dark" data-bs-target="#modalSondeo"
+                                data-bs-toggle="modal">
+                                Sondeo
+                            </button>
+
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button id="copiar" type="submit" class="btn btn-success">Copiar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- ================= MODAL PERSISTE ================= -->
+    <div class="modal fade" id="modalPersiste" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title">Persiste</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="card shadow">
+                        <div class="card-body">
+
+
+                            <form id="formWizard">
+
+                                <!-- PASO 1 -->
+                                <div class="step active">
+                                    <label class="form-label fw-bold">SERVICIO CON LA FALLA *</label>
+                                    <select class="form-select" id="servicio_falla" required>
+                                        <option value="">Seleccione</option>
+                                        <option>INTERNET</option>
+                                        <option>TV HD</option>
+                                        <option>VOZ IP</option>
+                                        <option>MUNDO GO</option>
+                                        <option>2 MUNDOS (INTERNET + TV)</option>
+                                        <option>2 MUNDOS (INTERNET + TELEFONIA)</option>
+                                        <option>2 MUNDOS (INTERNET + MUNDO GO)</option>
+                                        <option>3 MUNDOS (INTERNET + MUNDO GO + TELEFONIA)</option>
+                                    </select>
+                                </div>
+
+                                <!-- PASO 2 -->
+                                <div class="step">
+                                    <label class="form-label fw-bold">¿TIENE PÉRDIDA DE MONITOREO? *</label>
+                                    <select class="form-select" id="perdida_m" required>
+                                        <option value="">Seleccione</option>
+                                        <option>SI</option>
+                                        <option>NO</option>
+                                    </select>
+                                </div>
+
+                                <!-- PASO 3 -->
+                                <div class="step">
+                                    <label class="form-label fw-bold">EL CLIENTE SE ENCUENTRA CONECTADO POR *</label>
+                                    <select class="form-select" id="conectado" required>
+                                        <option value="">Seleccione</option>
+                                        <option>WIFI</option>
+                                        <option>POR CABLE DE RED</option>
+                                        <option>WIFI Y CABLE DE RED</option>
+                                    </select>
+                                </div>
+
+                                <!-- PASO 4 -->
+                                <div class="step">
+                                    <label class="form-label fw-bold">TIENE LUCES EN QUÉ ESTADO *</label>
+                                    <select class="form-select" id="luces" required>
+                                        <option value="">Seleccione</option>
+                                        <option>Luces Verdes (sin intermitencia)</option>
+                                        <option>Luz Roja (LOS)</option>
+                                        <option>Luz Power encendida sola</option>
+                                        <option>Luz PON intermitente</option>
+                                        <option>Sin luces encendidas en la ONT</option>
+                                    </select>
+                                </div>
+
+                                <!-- PASO 5 -->
+                                <div class="step">
+                                    <label class="form-label fw-bold">¿QUÉ ESTADO PRESENTA LA ONT? *</label>
+                                    <select class="form-select" id="estado_ont" required>
+                                        <option value="">Seleccione</option>
+                                        <option>CONECTADO</option>
+                                        <option>DESCONOCIDO</option>
+                                        <option>AUTOFIND</option>
+                                        <option>OFFLINE</option>
+                                        <option>POWEROFF</option>
+                                        <option>LOS</option>
+                                    </select>
+                                </div>
+
+                                <!-- PASO 6 -->
+                                <div class="step">
+                                    <label class="form-label fw-bold">¿REDES UNIFICADAS? *</label>
+                                    <select class="form-select" id="redes_u" required>
+                                        <option value="">Seleccione</option>
+                                        <option>SI</option>
+                                        <option>EL CLIENTE SOLICITA QUE SE LE DEJEN SEPARADAS</option>
+                                        <option>Otro</option>
+                                    </select>
+                                </div>
+
+                                <br>
+
+                                <!-- BOTONES -->
+                                <div class="">
+                                    <button type="button" class="btn btn-dark" id="prevBtn"><i
+                                            class="fa-solid fa-angles-left"></i></button>
+                                    <button type="button" class="btn btn-dark" id="nextBtn"><i
+                                            class="fa-solid fa-angles-right"></i></button>
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-target="#registroModal" data-bs-toggle="modal">
+                        Volver
+                    </button>
+
+                    <button id="generarBtn" disabled class="btn btn-success">
+                        Confirmar
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- ================= MODAL SONDEO ================= -->
+    <div class="modal fade" id="modalSondeo" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title">Sondeo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="card shadow">
+                        <div class="card-body">
+
+
+                            <form id="formWizard_s">
+
+                                <!-- PASO 1 -->
+                                <div class="step_s active">
+                                    <label class="form-label fw-bold">SERVICIO CON LA FALLA *</label>
+                                    <select class="form-select" id="servicio_falla_s" required>
+                                        <option value="">Seleccione</option>
+                                        <option>INTERNET</option>
+                                        <option>TV HD</option>
+                                        <option>VOZ IP</option>
+                                        <option>MUNDO GO</option>
+                                        <option>2 MUNDOS (INTERNET + TV)</option>
+                                        <option>2 MUNDOS (INTERNET + TELEFONIA)</option>
+                                        <option>2 MUNDOS (INTERNET + MUNDO GO)</option>
+                                        <option>3 MUNDOS (INTERNET + MUNDO GO + TELEFONIA)</option>
+                                    </select>
+                                </div>
+
+                                <!-- PASO 2 -->
+                                <div class="step_s">
+                                    <label class="form-label fw-bold">¿EL CLIENTE SE ESTA COMUNICANDO POR INCONVENIENTES
+                                        QUE HUBO AL MOMENTO DE LA INSTALACIÓN O REPARACIÓN?
+                                    </label>
+                                    <select class="form-select" id="instalacion_s" required>
+                                        <option value="">Seleccione</option>
+                                        <option>No</option>
+                                        <option>No realizo el soporte</option>
+                                        <option>No dio solución al inconveniente</option>
+                                        <option>Incumplimiento visita</option>
+                                        <option>Tuvo alguna discusión con el tecnico</option>
+                                        <option>Instalación deficiente</option>
+                                        <option>Ont en estado desconocido</option>
+                                        <option>Otro</option>
+                                    </select>
+                                </div>
+
+                                <!-- PASO 3 -->
+                                <div class="step_s">
+                                    <label class="form-label fw-bold">¿POR QUÉ SE COMUNICA EL CLIENTE? *</label>
+                                    <select class="form-select" id="comunica_cliente" required>
+                                        <option value="">Seleccione</option>
+                                        <option>Por servicio de internet</option>
+                                        <option>Por servicio de tv</option>
+                                        <option>Por servicio de fono</option>
+                                        <option>Incumplimiento visita</option>
+                                        <option>Otro:</option>
+                                    </select>
+                                </div>
+
+                                
+
+                                <!-- PASO 5 -->
+                                <div class="step_s">
+                                    <label class="form-label fw-bold">¿TIENE FALLA EN SUMINISTRO ELÉCTRICO? *</label>
+                                    <select class="form-select" id="falla_sumi" required>
+                                        <option value="">Seleccione</option>
+                                        <option>SI</option>
+                                        <option>NO</option>
+                                        <option>N/A</option>
+                                    </select>
+                                </div>
+
+                                <!-- PASO 6 -->
+                                <div class="step_s">
+                                    <label class="form-label fw-bold">¿TIENE GENERADOR ELÉCTRICO? *</label>
+                                    <select class="form-select" id="generador" required>
+                                        <option value="">Seleccione</option>
+                                        <option>SI</option>
+                                        <option>NO</option>
+                                        <option>N/A</option>
+                                    </select>
+                                </div>
+
+                                <!-- PASO 7 -->
+                                <div class="step_s">
+                                    <label class="form-label fw-bold">¿TIENE LUCES EN QUÉ ESTADO?
+                                        *
+                                    </label>
+                                    <select class="form-select" id="luces_s" required>
+                                        <option value="">Seleccione</option>
+                                        <option>Luces Verdes (sin intermitencia)</option>
+                                        <option>Luz Roja (LOS)</option>
+                                        <option>Luz (Power encendida) Sola</option>
+                                        <option>Luz Pon (Intermitente)</option>
+                                        <option>Sin Luces encendidas en la (ONT)</option>
+                                    </select>
+                                </div>
+
+                                <br>
+
+                                <!-- BOTONES -->
+                                <div class="">
+                                    <button type="button" class="btn btn-dark" id="prevBtn_s"><i
+                                            class="fa-solid fa-angles-left"></i></button>
+                                    <button type="button" class="btn btn-dark" id="nextBtn_s"><i
+                                            class="fa-solid fa-angles-right"></i></button>
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-target="#registroModal" data-bs-toggle="modal">
+                        Volver
+                    </button>
+
+                    <button id="generarBtn_s" disabled class="btn btn-success">
+                        Confirmar
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.10/sweetalert2.min.js"></script>
+    <script src="main.js"></script>
+    <script src="main2.js"></script>
+</body>
+
+
+</html>
