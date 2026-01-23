@@ -66,6 +66,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Guardar / Actualizar
     document.getElementById("formRegistro").addEventListener("submit", (e) => {
         e.preventDefault();
+        document.getElementById("formWizard").reset();
+        document.getElementById("formWizard_s").reset();
+        
         const registro = {
             fecha: fecha.value,
             cedula: cedula.value,
@@ -486,6 +489,7 @@ Observación: ${datosFormulario.observacion}
     });
 
 });
+
 
 
 
