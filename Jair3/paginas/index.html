@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Grupo FORM</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; padding: 50px; background: #f4f4f9; }
+        .group-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 300px; text-align: center; }
+        h2 { color: #333; margin-bottom: 20px; }
+        button { background: #4285f4; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #357ae8; }
+    </style>
+</head>
+<body>
+
+<div class="group-container">
+    <button onclick="abrirFormularios()">Abrir todos los formularios</button>
+</div>
+
+<script>
+function abrirFormularios() {
+    const urls = [
+        "https://mundopacifico.cl",
+        "https://tumundo.cl",
+        "https://atec.tumundo.cl/atec",
+        "file://sm1f1l01w16s/Ope_Allus/Mundo_Telecomunicaciones/Asesores/MUNDO%20SOP%20SS%20231412/JOHN%20VASQUEZ/hoarios%20.png",
+        "file://sm1f1l01w16s/Ope_Allus/Mundo_Telecomunicaciones/Asesores/MUNDO%20SOP%20SS%20231412/JOHN%20VASQUEZ/MANUAL%20DE%20MUNDO%20CONECT%20ACTUALIZADO%20-X202025%20-S20V1.1.pdf",
+        "file://sm1f1l01w16s/Ope_Allus/Mundo_Telecomunicaciones/Asesores/MUNDO%20SOP%20SS%20231412/JOHN%20VASQUEZ/MANUAL%20DE%20MUNDO%20CONECT%20ACTUALIZADO%20-X202025%20-S20V1.1.pdf",
+        "file://sm1f1l01w16s/Ope_Allus/Mundo_Telecomunicaciones/Asesores/MUNDO%20SOP%20SS%20231412/JOHN%20VASQUEZ/MAX.pdf",
+        "https://www.mundogo.cl/link",
+        "https://www.mundogo.cl/recordar",
+        "file://sm1f1l01w16s/Ope_Allus/Mundo_Telecomunicaciones/Asesores/MUNDO%20SOP%20SS%20231412/JOHN%20VASQUEZ/script%20visita.png",
+        "https://google.com",
+        "https://google.com",
+        "https://google.com",
+        "https://google.com",
+        "https://jarvis.grupokonecta.local/es/turnos/asesor",
+        "https://grupokonecta.local",
+        "https://cdgchat.grupokonecta.local/group/Soporte-Tecnico",
+        "https://api-sigma.holdconet.com/contingencias-contact",
+        "file://sm1f1l01w16s/Ope_Allus/Mundo_Telecomunicaciones/Asesores/MUNDO%20SOP%20SS%20231412/JOHN%20VASQUEZ/Grilla%20MundoGo%20(Grilla).pdf",
+        "https://www.tumundo.cl/nuestras-sucursales/",
+        "https://google.com"
+    ];
+
+    urls.forEach(url => {
+        window.open(url, '_blank');
+    });
+}
+</script>
+
+</body>
+</html>
