@@ -703,10 +703,23 @@ function init() {
             "Conectado sin Internet, reset eléctrico, cambio de canal, refresh ip servicio ok",
             "Cliente indica que módem no enciende, se cambia de toma corriente, se revisa botón on/off, se verifica y ont esta en power off",
             "Cliente se comunica para solicitar cambio de contraseña, se valida datos, se realiza cambio cliente se conecta",
-            "Cliente se comunica para solicitar la contraseña se valida datos se indica cliente se conecta"
+            "Cliente se comunica para solicitar la contraseña, se valida datos, se indica la contraseña cliente se conecta"
         ],
-        tv: [],
-        tl: []
+        tv: [
+            "reset eléctrico deco, cambio de canal, refresh ip servicio ok",
+            "Cliente se comunica para vincular mundo go, se indica que escaneé el código qr, inicia sesión, vincula el deco servicio ok",
+            "Error de conexión de red en deco, reset eléctrico deco, cambio de canal, refresh ip, se conecta deco al wifi servicio ok",
+            "Sin señal deco con luces, reset eléctrico deco, se revisa HDMI 1,2,3 con botón input o source, se revisa cableado, no retoma",
+            "Deco se queda cargando, reset eléctrico de, cambio de canal, refresh ip, servicio ok",
+            "Con imagen pero sin audio en todos lo canales, reset eléctrico deco, se revisa volumen con controles televisión y deco, se revisa cableado servicio no retoma",
+            "Cliente indica que deco ya no prende, se conecta en otro toma corriente, se revisa cableado, se revisa botón on/off no retoma",
+            "Control no funciona con baterías nuevas, vincular control no retoma se indica sucursal",
+            "solicita visita tecnica se indica script cliente acepta",
+        ],
+        tl: [
+            "reset eléctrico modem, cambio de canal, refresh ip servicio ok",
+            "Cliente con falla en el servicio de Telefonía, indica que el teléfono tiene tono, no puede realizar ni recibir llamadas, reset eléctrico modem, cambio de canal, refresh ip, se revisa niveles dentro del rango, se revisa dentro de la ont estado (IDLE), cable de teléfono, se revisa cableado. Todo esta de manera correcta, se realiza prueba, cliente manifiesta que el servicio no retorna",
+        ]
     };
 
     Object.keys(keys).forEach(tipo => {
